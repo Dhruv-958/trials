@@ -69,6 +69,11 @@
         } else {
             resultElement.textContent = 'Invalid URL parameters.';
         }
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+        console.log("Done")
+});
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
