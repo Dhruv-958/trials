@@ -167,8 +167,12 @@
                 const totalQuestions = questions.length;
                 window.location.href = `result.html?score=${score}&total=${totalQuestions}`;
             }
+            
         }
-
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+        console.log("Done")});
 
         generateQuiz();
     </script>
