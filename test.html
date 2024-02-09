@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Quiz Page</title>
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .options label:hover {
+            background-color: #d8e0f3;
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h1>Quiz Title</h1>
+        <div id="quizQuestions"></div>
+        <div class="text-center mt-4">
+            <a href="#" onclick="submitQuiz()" class="btn btn-primary">Submit</a>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What is the capital of France?",
+                options: ["London", "Berlin", "Paris", "Madrid"],
+                correctAnswer: "c"
+            },
+            {
+                question: "What is the largest planet in our solar system?",
+                options: ["Earth", "Mars", "Jupiter", "Venus"],
+                correctAnswer: "c"
+            },
+            {
+                question: "Which programming language is known for its flexibility and ease of use?",
+                options: ["Java", "Python", "C++", "Ruby"],
+                correctAnswer: "b"
+            }
+            // Add more questions as needed
+        ];
+
+        function generateQuiz() {
+            const quizContainer = document.getElementById("quizQuestions");
+
+            for (let i = 0; i < quizData.length; i++) {
+                const questionDiv = document.createElement("div");
+                questionDiv.classList.add("question");
+
+                const questionText = document.createElement("p");
+                questionText.textContent = `${i + 1}. ${quizData[i].question}`;
+                questionDiv.appendChild(questionText);
+
+                const optionsDiv = document.createElement("div");
+                optionsDiv.classList.add("options");
+
+                // for (let j = 0; j < quizData[i].options.length; j++) {
+                //     const label = document.createElement("label");
+                //     const input = document.createElement("input");
+                //     input.type = "radio";
+                //     label.textContent = `${String.fromCharCode(97 + j)}) ${quizData[i].options[j]}`;
+                //     // input.value = `${String.fromCharCode(97 + j)}) ${quizData[i].options[j]}`;
+                //     input.name = `q${i + 1}`;
+                //     input.value = String.fromCharCode(97 + j); // Convert ASCII code to character ('a' to 'z')
+                //     label.appendChild(input);
+                    
+                //     optionsDiv.appendChild(label);
+                // }
+                for (let j = 0; j < quizData[i].options.length; j++) {
+                    const label = document.createElement("label");
+                    const input = document.createElement("input");
+                    input.type = "radio";
+                    input.name = `q${i + 1}`;
+                    input.value = String.fromCharCode(97 + j);
+
+                    // Insert the radio button before the label text content
+                    label.appendChild(input);
+                    label.appendChild(document.createTextNode(`${quizData[i].options[j]}`));
+                    
+                    optionsDiv.appendChild(label);
+                }
+
+
+                questionDiv.appendChild(optionsDiv);
+                quizContainer.appendChild(questionDiv);
+            }
+        }
+        
+        function submitQuiz() {
+            // Check if at least one option is selected for each question
+            const questions = document.querySelectorAll('.question');
+            let score = 0;
+            let allQuestionsAnswered = true;
+
+            for (let i = 0; i < questions.length; i++) {
+                const options = questions[i].querySelectorAll('input[type="radio"]');
+                let questionAnswered = false;
+
+                for (let j = 0; j < options.length; j++) {
+                    if (options[j].checked) {
+                        questionAnswered = true;
+
+                        if (options[j].value === quizData[i].correctAnswer) {
+                            score++;
+                        }
+
+                        break;
+                    }
+                }
+
+                if (!questionAnswered) {
+                    allQuestionsAnswered = false;
+                    alert('Please answer all questions before submitting.');
+                    break; // Stop further validation if any question is unanswered
+                }
+            }
+
+            // Redirect to the result page only if all questions are answered
+            if (allQuestionsAnswered) {
+                const totalQuestions = questions.length;
+                window.location.href = `result.html?score=${score}&total=${totalQuestions}`;
+            }
+        }
+
+
+        generateQuiz();
+    </script>
+
+    <br><br>
+
+    <!-- Include footer -->
+    <footer class="bg-dark text-light py-3">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 Your Quiz App. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
