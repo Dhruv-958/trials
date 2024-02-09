@@ -76,6 +76,11 @@
             window.location.href = 'test.html';
             return false; // Prevent form submission (optional)
         }
+        history.pushState(null, null, document.URL);
+        window.addEventListener('popstate', function () {
+        history.pushState(null, null, document.URL);
+        console.log("Done")
+});
     </script>
 </body>
 
